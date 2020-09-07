@@ -1,19 +1,32 @@
 {
-  "name": "with-tailwindcss-emotion",
+  "name": "nextjs-symblai-showcase",
   "version": "1.0.0",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "build:base-css": "tailwindcss build ./styles/tailwind.base.css -o ./styles/base.css"
+    "build:base-css": "tailwindcss build ./styles/tailwind.base.css -o ./styles/base.css",
+    "type-check": "tsc --pretty --noEmit",
+    "format": "prettier --write \"**/*.{js,ts,tsx}\"",
+    "lint": "eslint . --ext ts --ext tsx --ext js"
   },
   "dependencies": {
+    "@emotion/core": "^10.0.35",
     "@emotion/css": "^11.0.0-next.12",
     "@emotion/react": "^11.0.0-next.12",
     "@emotion/styled": "^11.0.0-next.12",
+    "@types/react-typist": "^2.0.1",
+    "@types/socket.io": "^2.1.11",
+    "@types/socket.io-client": "^1.4.33",
+    "awesome-phonenumber": "^2.38.0",
+    "emotion-theming": "^10.0.27",
     "next": "latest",
     "react": "16.13.1",
-    "react-dom": "16.13.1"
+    "react-dom": "16.13.1",
+    "react-typist": "^2.0.5",
+    "socket.io": "^2.3.0",
+    "socket.io-client": "^2.3.0",
+    "symbl-node": "^1.0.10"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
@@ -21,8 +34,17 @@
     "@emotion/server": "^11.0.0-next.12",
     "@tailwindcss/ui": "^0.2.2",
     "@tailwindcssinjs/macro": "^0.3.1",
+    "@types/node": "^14.6.4",
+    "@types/react": "^16.9.49",
+    "@typescript-eslint/eslint-plugin": "^4.0.1",
+    "@typescript-eslint/parser": "^4.0.1",
     "babel-plugin-macros": "2.8.0",
-    "tailwindcss": "^1.6.0"
+    "eslint": "^7.8.1",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-react": "^7.20.6",
+    "prettier": "^2.1.1",
+    "tailwindcss": "^1.6.0",
+    "typescript": "^4.0.2"
   },
   "license": "MIT"
 }

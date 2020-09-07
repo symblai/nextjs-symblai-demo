@@ -1,1 +1,13 @@
 @tailwind base;
+@tailwind components;
+
+@tailwind utilities;
+.bg-black-alt {
+  background: #191919;
+}
+.text-black-alt {
+  color: #191919;
+}
+.border-black-alt {
+  border-color: #191919;
+}
