@@ -1,6 +1,8 @@
 import Server from 'socket.io'
-import { subscribeToRealtimeEvents } from '../../integrations/symbl/utils'
-
+import {
+  subscribeToRealtimeEvents,
+  stopEndpoint,
+} from '../../integrations/symbl/utils'
 const ioHandler = (req: any, res: any) => {
   if (!res.socket.server.io) {
     const io = new Server(res.socket.server)
@@ -10,6 +12,10 @@ const ioHandler = (req: any, res: any) => {
         subscribeToRealtimeEvents(msg.connectionId, (data) => {
           socket.emit('realtimeEvent', data)
         })
+      })
+      socket.on('endCall', (msg: any) => {
+        console.log('stopSubscription for the connection')
+        stopEndpoint(msg.connectionId)
       })
     })
 
