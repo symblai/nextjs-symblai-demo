@@ -11,9 +11,7 @@ export const Card = ({
 }) => (
   <div className={css(tw`w-full md:w-1/2 xl:w-1/2 p-3`)}>
     <div
-      className={css(
-        tw`bg-gray-900 border border-gray-800 rounded shadow p-2 h-64`
-      )}
+      className={css(tw`bg-gray-900 border border-gray-800 rounded shadow p-2`)}
     >
       <div className={css(tw`flex flex-row items-center`)}>
         <div className={css(tw`flex-1 text-right md:text-center`)}>

@@ -5,9 +5,8 @@ let stopEndpointTimeoutRef: any = null
 
 const sdkInit = async () => {
   await sdk.init({
-    appId: '387939426a786b70446a414638346e4a7a3636577339776e794637743458746e',
-    appSecret:
-      '3267345a79644577563533584a3478414932664148515663314570543265317245344c6f73674b4635334c626e7832775f5856634d67664d4a7770384a676371',
+    appId: process.env.APP_ID,
+    appSecret: process.env.APP_SECRET,
     basePath: apiBase,
   })
 }
@@ -40,6 +39,7 @@ export const stopEndpoint = async (connectionId: string) => {
 
 export const startEndpoint = async (
   phoneNumber: string,
+  insightTypes = [],
   callback: (data: any) => Promise<void>,
   endCallAfterInSeconds = 300
 ): Promise<any> => {
@@ -53,6 +53,7 @@ export const startEndpoint = async (
           phoneNumber,
         },
         intents,
+        insightTypes,
         actions: [
           {
             invokeOn: 'stop',
