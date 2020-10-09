@@ -2,21 +2,23 @@ import { useState } from 'react'
 import { PhoneConfigurations } from '../../components/PhoneConfigurations'
 import { css } from '@emotion/css'
 import tw from '@tailwindcssinjs/macro'
-import { Card } from '../../components/Card'
-import { ConversationCard } from '../../components/ConversationCard'
-import { TypingIntro } from '../../components/TypingIntro'
-import { Divider } from '../../components/Divider'
-import { ProtectedPage } from '../../components/ProtectedPage'
+import {
+  Card,
+  FlexWrap,
+  ConversationCard,
+  TypingIntro,
+  Divider,
+  ProtectedPage,
+  Link,
+} from '../../components'
 import { useConnection, useConversation, useAuth } from '../../hooks'
 
 const INSIGHT_TYPES = ['question', 'action_item']
 const Index = () => {
   const [connectionId, setConnectionId] = useConnection()
-  const { token } = useAuth()
   const { conversationData, setConversationData } = useConversation()
 
   function handleConnection(data: any) {
-    console.log('Connection Data', data)
     setConnectionId(data.connectionId)
     setConversationData(data)
   }
@@ -32,9 +34,15 @@ const Index = () => {
         <span className={css(tw`text-blue-400`)}>6055920157065216</span> or call
         your phone and get conversationId from conversationData
       </div>
+      <Link href="https://docs.symbl.ai/#conversation-api">
+        You can use Conversations API to retrieve lots of data from the
+        conversation. Here you can either call your phone number or enter
+        conversationId and retrieve different types of data for existing
+        conversation.
+      </Link>
+      <Divider />
       <PhoneConfigurations
         clientOnly
-        accessToken={token}
         connectionResponseHandler={handleConnection}
         insightTypes={INSIGHT_TYPES}
       />
@@ -44,7 +52,7 @@ const Index = () => {
         >{`conversationId ${conversationData.conversationId}`}</label>
       ) : null}
       <Divider />
-      <div className={css(tw`flex flex-wrap`)}>
+      <FlexWrap>
         <Card title="ConnectionData">
           <div>
             <textarea
@@ -67,7 +75,6 @@ const Index = () => {
         <ConversationCard
           title="Messages"
           type="messages"
-          token={token}
           conversationId={
             (conversationData && conversationData.conversationId) || ''
           }
@@ -84,7 +91,6 @@ const Index = () => {
         <ConversationCard
           title="Participants"
           type="members"
-          token={token}
           conversationId={
             (conversationData && conversationData.conversationId) || ''
           }
@@ -101,7 +107,6 @@ const Index = () => {
         <ConversationCard
           title="Insights"
           type="insights"
-          token={token}
           conversationId={
             (conversationData && conversationData.conversationId) || ''
           }
@@ -118,7 +123,6 @@ const Index = () => {
         <ConversationCard
           title="Topics"
           type="topics"
-          token={token}
           conversationId={
             (conversationData && conversationData.conversationId) || ''
           }
@@ -135,7 +139,6 @@ const Index = () => {
         <ConversationCard
           title="Questions"
           type="questions"
-          token={token}
           conversationId={
             (conversationData && conversationData.conversationId) || ''
           }
@@ -152,7 +155,6 @@ const Index = () => {
         <ConversationCard
           title="Follow ups"
           type="follow-ups"
-          token={token}
           conversationId={
             (conversationData && conversationData.conversationId) || ''
           }
@@ -170,7 +172,6 @@ const Index = () => {
         <ConversationCard
           title="Action items"
           type="action-items"
-          token={token}
           conversationId={
             (conversationData && conversationData.conversationId) || ''
           }
@@ -184,7 +185,7 @@ const Index = () => {
             </span>
           </div>
         </ConversationCard>
-      </div>
+      </FlexWrap>
     </ProtectedPage>
   )
 }

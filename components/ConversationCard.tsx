@@ -1,21 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import { css } from '@emotion/css'
 import tw from '@tailwindcssinjs/macro'
-import { Card } from './Card'
-import Button from '../components/Button'
-
+import { Button, Card } from '../components'
+import { useAuth } from '../hooks'
 const CONVERSATION_API = 'https://api.symbl.ai/v1/conversations'
 
 export const ConversationCard = ({
   title,
   children,
-  token,
   conversationId: cId,
   type,
 }: {
   title: string
   conversationId: string
-  token: string
   children: JSX.Element
   type:
     | 'messages'
@@ -26,6 +23,7 @@ export const ConversationCard = ({
     | 'follow-ups'
     | 'action-items'
 }) => {
+  const { token } = useAuth()
   const [conversationId, setConverstationId] = useState(cId)
   const [responseData, setResponseData] = useState()
 
