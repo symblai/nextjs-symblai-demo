@@ -3,9 +3,7 @@ import { PhoneConfigurations } from '../components/PhoneConfigurations'
 import { css } from '@emotion/css'
 import tw from '@tailwindcssinjs/macro'
 import io from 'socket.io-client'
-import { Card } from '../components/Card'
-import { TypingIntro } from '../components/TypingIntro'
-import { Divider } from '../components/Divider'
+import { Link, Card, TypingIntro, Divider, FlexWrap } from '../components'
 import { useConnection, useConversation } from '../hooks'
 
 const Index = () => {
@@ -65,6 +63,13 @@ const Index = () => {
         connection on the client side
       </TypingIntro>
       <Divider />
+      <Link href="https://docs.symbl.ai/#get-live-transcription-phone-call-node-js-telephony">
+        On this page you can see how to initiate a phone call using Symbl Node
+        SDK. There is a call from this page to api/call endpoint that executes
+        the call on the NodeJS side. Connection to the client is via websockets
+        using socket.io. You can read more about how to use Symbl.ai in Node
+      </Link>
+      <Divider />
       <PhoneConfigurations insightTypes={['question', 'action_item']} />
       {connectionId ? (
         <label
@@ -72,7 +77,8 @@ const Index = () => {
         >{`connectionId ${connectionId}`}</label>
       ) : null}
       <Divider />
-      <div className={css(tw`flex flex-wrap`)}>
+
+      <FlexWrap>
         <Card title="Live Transcriptions">
           <div>
             <div className="text-gray-500">
@@ -126,7 +132,7 @@ const Index = () => {
             </div>
           </div>
         </Card>
-      </div>
+      </FlexWrap>
     </>
   )
 }

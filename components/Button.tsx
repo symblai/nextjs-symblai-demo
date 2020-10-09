@@ -1,7 +1,7 @@
 import { css } from '@emotion/css'
 import tw from '@tailwindcssinjs/macro'
 
-const Button = ({ children, ...props }: any) => (
+export const Button = ({ children, ...props }: any) => (
   <button
     {...props}
     className={css(
@@ -11,5 +11,3 @@ const Button = ({ children, ...props }: any) => (
     {children}
   </button>
 )
-
-export default Button
