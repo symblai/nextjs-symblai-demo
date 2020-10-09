@@ -1,7 +1,7 @@
 import React from 'react'
 import { css } from '@emotion/css'
 import tw from '@tailwindcssinjs/macro'
-import Button from './Button'
+import { Button } from './Button'
 import { useAuth } from '../hooks'
 
 export const ProtectedPage: React.FC = ({ children }) => {

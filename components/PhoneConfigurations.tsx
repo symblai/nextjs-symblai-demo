@@ -2,20 +2,19 @@ import { useState } from 'react'
 import { css } from '@emotion/css'
 import tw from '@tailwindcssinjs/macro'
 import PhoneNumber from 'awesome-phonenumber'
-import Button from '../components/Button'
-import { useConnection, useConversation } from '../hooks'
+import { Button } from '../components'
+import { useConnection, useConversation, useAuth } from '../hooks'
 
 export const PhoneConfigurations = ({
   insightTypes,
-  accessToken,
   clientOnly,
   connectionResponseHandler,
 }: {
   insightTypes: string[]
   clientOnly?: boolean
-  accessToken?: string
   connectionResponseHandler?: (data: any) => void
 }) => {
+  const { token } = useAuth()
   const [phone, setPhone] = useState('')
   const [connectionId, setConnectionId] = useConnection()
   const { setConversationData } = useConversation()
@@ -54,7 +53,7 @@ export const PhoneConfigurations = ({
       const res = await fetch('https://api.symbl.ai/v1/endpoint:connect', {
         method: 'POST',
         headers: {
-          'x-api-key': accessToken as string,
+          'x-api-key': token as string,
           'Content-Type': 'application/json',
         },
         mode: 'cors',
