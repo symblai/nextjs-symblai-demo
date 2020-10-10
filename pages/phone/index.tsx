@@ -10,7 +10,6 @@ import {
   Divider,
   ProtectedPage,
   ConnectionLabel,
-  ConversationCard,
   Link,
 } from '../../components'
 import { useConnection, useConversation, useAuth } from '../../hooks'
@@ -21,10 +20,9 @@ const Index = () => {
   const [connectionId, setConnectionId] = useConnection()
   const { token } = useAuth()
   const { conversationData, setConversationData } = useConversation()
-  const [liveTranscript, setLiveTranscript] = useState([])
+  const [liveTranscript, setLiveTranscript] = useState<any[]>([])
   const [realtimeData, setRealTimeData] = useState({})
   const [messages, setMessages] = useState<any[]>([])
-  const [insights, setInsights] = useState<any[]>([])
 
   function handleConnection(data: any) {
     console.log('Connection Data', data)
@@ -37,12 +35,20 @@ const Index = () => {
 
     if (conversationData && !ws) {
       ws = new WebSocket(
-        `wss://api.symbl.ai/v1/realtime/insights/${connectionId}?access_token=${token}`
+        `wss://api.symbl.ai/session/subscribe/${connectionId}?access_token=${token}`
       )
 
       ws.onmessage = (event: MessageEvent) => {
         const data = JSON.parse(event.data)
-        console.log('Response', data)
+        if (data.type === 'message_response') {
+          console.log(data.messages)
+          setMessages(data.messages)
+        }
+        if (data.type === 'transcript_response') {
+          console.log(data.payload.content)
+          setLiveTranscript(data)
+        }
+
         setRealTimeData(data)
       }
     }
@@ -74,41 +80,6 @@ const Index = () => {
       <ConnectionLabel />
       <Divider />
       <FlexWrap>
-        <ConversationCard
-          title="Messages"
-          type="messages"
-          conversationId={
-            (conversationData && conversationData.conversationId) || ''
-          }
-        >
-          <div>
-            <div className="text-gray-500">
-              Meaningful messages that are parsed from transcriptions
-            </div>
-            <ul>
-              {messages.map((message, index) => (
-                <li key={`${message}-${index}`}>{message.payload.content}</li>
-              ))}
-            </ul>
-          </div>
-        </ConversationCard>
-        <ConversationCard
-          title="Insights"
-          type="insights"
-          conversationId={
-            (conversationData && conversationData.conversationId) || ''
-          }
-        >
-          <div>
-            <div className="text-gray-500">
-              Insights of different types will be presented here. For example
-              action items, questions, tasks etc
-            </div>
-          </div>
-        </ConversationCard>
-      </FlexWrap>
-      <Divider />
-      <FlexWrap>
         <JsonPayloadCard
           json={realtimeData}
           title="Realtime data from websocket"
@@ -118,28 +89,21 @@ const Index = () => {
         <JsonPayloadCard json={conversationData} title="Connection data">
           <div>Realtime data</div>
         </JsonPayloadCard>
-        <Card title="Live Transcriptions">
+      </FlexWrap>
+      <Divider />
+      <FlexWrap>
+        <Card title="Messages">
           <div>
-            {conversationData && conversationData.conversationId && (
-              <Transcripts
-                onMessageResponse={(updateLiveTranscripts) =>
-                  updateLiveTranscripts(liveTranscript)
-                }
-              />
-            )}
             <div className="text-gray-500">
-              This transcript are using predefined Transcripts element from{' '}
-              <a
-                href="https://www.npmjs.com/package/@symblai/react-elements"
-                className={css(tw`text-blue-400`)}
-              >
-                @symblai/react-elements
-              </a>
+              Meaningful messages that are parsed from transcriptions
             </div>
-            <textarea
-              className={css(tw`h-32 w-full bg-black p-4 mt-4`)}
-              value={JSON.stringify(liveTranscript, null, 2)}
-            />
+            <ul>
+              {messages.map((message, index) => (
+                <li key={`${message}-${index}`}>
+                  {message.payload && message.payload.content}
+                </li>
+              ))}
+            </ul>
           </div>
         </Card>
       </FlexWrap>
