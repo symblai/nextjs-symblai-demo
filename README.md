@@ -19,7 +19,7 @@ APP_SECRET=
 
 ## About this app.
 
-This app is using [ReactJS](https://reactjs.org/) and [NextJS](https://nextjs.org/). Let's take a look at folder structure
+This app is using [ReactJS](https://reactjs.org/), [Typescript](https://www.typescriptlang.org/) and [NextJS](https://nextjs.org/). Let's take a look at folder structure
 
 - `pages` In Next.js, a page is a React Component exported from a `.js`, `.jsx`, `.ts`, or `.tsx` file in the pages directory. Each page is associated with a route based on its file name. You can read more about how NextJS works with pages [here](https://nextjs.org/docs/basic-features/pages)
 
