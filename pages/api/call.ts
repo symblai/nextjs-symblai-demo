@@ -8,18 +8,25 @@ async function onSpeechDetected(data: any) {
 export default (req: any, res: any) => {
   res.statusCode = 200
   res.setHeader('Content-Type', 'application/json')
-  const { phoneNumber, start, connectionId, insightTypes } = JSON.parse(
-    req.body
-  )
+  const {
+    phoneNumber,
+    dtmf,
+    type,
+    summaryEmails,
+    start,
+    connectionId,
+    insightTypes,
+  } = JSON.parse(req.body)
 
   if (start) {
     console.log('Calling ', phoneNumber)
-    startEndpoint(phoneNumber, insightTypes, onSpeechDetected).then(
-      (connectionId: string) => {
-        console.log('Connection Started', connectionId)
-        res.end(JSON.stringify({ connectionId }))
-      }
-    )
+    startEndpoint(
+      { phoneNumber, dtmf, type, summaryEmails, insightTypes },
+      onSpeechDetected
+    ).then((connectionId: string) => {
+      console.log('Connection Started', connectionId)
+      res.end(JSON.stringify({ connectionId }))
+    })
   } else {
     if (connectionId) {
       console.log('Connection Stopped', connectionId)

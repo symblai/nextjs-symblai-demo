@@ -5,6 +5,7 @@ export const FlexWrap: React.FC = ({ children }) => (
   <div className={css(tw`flex flex-wrap`)}>{children}</div>
 )
 
+export * from './AsyncParamsUI'
 export * from './Header'
 export * from './Button'
 export * from './Card'

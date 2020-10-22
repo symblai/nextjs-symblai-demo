@@ -14,7 +14,7 @@ export const Card = ({
       className={css(tw`bg-gray-900 border border-gray-800 rounded shadow p-2`)}
     >
       <div className={css(tw`flex flex-row items-center`)}>
-        <div className={css(tw`flex-1 text-right md:text-center`)}>
+        <div className={css(tw`flex-1 text-center`)}>
           <h5 className={css(tw`font-bold uppercase text-gray-400`)}>
             {title}
           </h5>

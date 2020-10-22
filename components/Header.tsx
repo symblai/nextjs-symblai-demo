@@ -1,14 +1,19 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { css } from '@emotion/css'
 import tw from '@tailwindcssinjs/macro'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useConnection } from '../hooks'
-export const Header = () => {
+export const Header = ({
+  menuOpen,
+  setMenuOpen,
+}: {
+  menuOpen: boolean
+  setMenuOpen: any
+}) => {
   const router = useRouter()
-  const [connectionId] = useConnection()
-  const isActive = (href: string) => router.pathname === href
 
+  const isActive = (href: string) => router.pathname === href
   const SafeLink = Link
   return (
     <nav
@@ -20,12 +25,12 @@ export const Header = () => {
           tw`w-full container mx-auto flex flex-wrap items-center mt-0 pt-3 pb-3 md:pb-0`
         )}
       >
-        <div className={css(tw`w-1/2 pr-0`)}>
-          <div className={css(tw`flex relative inline-block`)}>
-            <div className={css(tw`relative text-sm text-gray-100`)}>
+        <div className={css(tw`lg:w-1/2 w-full pr-0`)}>
+          <div className={css(tw`flex relative w-full lg:w-auto`)}>
+            <div className={css(tw`relative text-sm text-gray-100 w-1/2`)}>
               <button
                 id="userButton"
-                className={css(tw`flex items-center focus:outline-none mr-3`)}
+                className={css(tw`flex items-center focus:outline-none`)}
               >
                 <svg
                   width="180"
@@ -82,9 +87,13 @@ export const Header = () => {
                 </svg>
               </button>
             </div>
-            <div className={css(tw`block lg:hidden pr-4`)}>
+            <div className={css(tw`block lg:hidden pr-4 fixed right-4`)}>
               <button
                 id="nav-toggle"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setMenuOpen(!menuOpen)
+                }}
                 className={css(
                   tw`flex items-center px-3 py-2 border rounded text-gray-500 border-gray-600 hover:text-gray-100 hover:border-teal-500 appearance-none focus:outline-none`
                 )}
@@ -104,7 +113,8 @@ export const Header = () => {
 
         <div
           className={css(
-            tw`w-full flex-grow lg:flex lg:items-center lg:w-auto hidden lg:block mt-2 lg:mt-0 bg-gray-800 z-20`
+            tw`w-full flex-grow lg:flex lg:items-center lg:w-auto hidden lg:block mt-2 lg:mt-0 bg-gray-800 z-20`,
+            menuOpen && tw`block`
           )}
           id="nav-content"
         >

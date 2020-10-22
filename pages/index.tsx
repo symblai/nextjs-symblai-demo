@@ -8,7 +8,6 @@ import { useConnection, useConversation } from '../hooks'
 
 const Index = () => {
   const [connectionId] = useConnection()
-  const { conversationData } = useConversation()
   const [liveTranscript, setLiveTranscript] = useState('')
   const [messages, setMessages] = useState<any[]>([])
   const [insights, setInsights] = useState<any[]>([])
@@ -110,26 +109,6 @@ const Index = () => {
                 <li key={`${insight}-${index}`}>{insight.text}</li>
               ))}
             </ul>
-          </div>
-        </Card>
-        <Card title="ConversationData">
-          <div>
-            <textarea
-              className={css(tw`h-32 w-full bg-black p-4 mt-4`)}
-              value={JSON.stringify(conversationData, null, 2)}
-            />
-            <div>
-              With conversation data, you can call Conversation API to get lots
-              of data. Read more{' '}
-              <a
-                className={css(tw`text-blue-400`)}
-                href="https://docs.symbl.ai/#conversation-api"
-                target="_blank"
-                rel="noreferrer"
-              >
-                here
-              </a>
-            </div>
           </div>
         </Card>
       </FlexWrap>

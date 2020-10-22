@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { css } from '@emotion/css'
 import tw from '@tailwindcssinjs/macro'
 import PhoneNumber from 'awesome-phonenumber'
-import { Button } from '../components'
+import { Button, Divider } from '../components'
 import { useConnection, useConversation, useAuth } from '../hooks'
 
 export const PhoneConfigurations = ({
@@ -19,6 +19,9 @@ export const PhoneConfigurations = ({
   const [connectionId, setConnectionId] = useConnection()
   const { setConversationData } = useConversation()
   const [phoneError, setPhoneError] = useState('')
+  const [dtmf, setDtmf] = useState('')
+  const [type, setType] = useState('pstn')
+  const [summaryEmails, setSummaryEmails] = useState('')
   const [calling, setCalling] = useState(false)
   async function startCall() {
     if (!phone) {
@@ -42,7 +45,10 @@ export const PhoneConfigurations = ({
         method: 'POST',
         body: JSON.stringify({
           phoneNumber: _phoneNumber,
-          insights: insightTypes,
+          dtmf: dtmf,
+          type,
+          insightTypes,
+          summaryEmails,
           start: true,
         }),
       })
@@ -50,6 +56,8 @@ export const PhoneConfigurations = ({
       const json = await res.json()
       setConnectionId(json.connectionId)
     } else {
+      const phoneNumberOrUri =
+        type === 'sip' ? { uri: _phoneNumber } : { phoneNumber: _phoneNumber }
       const res = await fetch('https://api.symbl.ai/v1/endpoint:connect', {
         method: 'POST',
         headers: {
@@ -60,8 +68,9 @@ export const PhoneConfigurations = ({
         body: JSON.stringify({
           operation: 'start',
           endpoint: {
-            type: 'pstn',
-            phoneNumber: _phoneNumber,
+            type,
+            ...phoneNumberOrUri,
+            dtmf,
           },
           insightTypes,
           actions: [
@@ -69,7 +78,7 @@ export const PhoneConfigurations = ({
               invokeOn: 'stop',
               name: 'sendSummaryEmail',
               parameters: {
-                emails: ['vnovick@gmail.com'],
+                emails: summaryEmails.split(','),
               },
             },
           ],
@@ -107,15 +116,33 @@ export const PhoneConfigurations = ({
     <div>
       <div>
         <label className={css(tw`m-3 text-gray-400`)}>Phone number</label>
-        <div className={css(tw`flex`)}>
+        <div className={css(tw`flex ml-4`)}>
+          <span className={css(tw`flex text-gray-400 items-center`)}>
+            Type:
+          </span>
+          <select
+            className={css(
+              tw`flex flex-wrap bg-gray-900 text-sm text-gray-400 transition border border-gray-800 focus:outline-none focus:border-gray-600 rounded py-1 px-2  appearance-none leading-normal m-3 w-14`
+            )}
+            id="type"
+            value={type}
+            onChange={(e) => setType(e.target.value)}
+          >
+            <option value="pstn">
+              PSTN (Public Switched Telephone Networks)
+            </option>
+            <option value="sip">SIP (Session Initiation Protocol)</option>
+          </select>
           <input
             disabled={!!connectionId || calling}
             onChange={(e) => setPhone(e.target.value)}
             type="text"
             value={phone}
-            placeholder="Enter US phone number"
+            placeholder={
+              type === 'pstn' ? 'Enter US phone number' : 'Enter SIP uri'
+            }
             className={css(
-              tw`flex flex-wrap bg-gray-900 text-sm text-gray-400 transition border border-gray-800 focus:outline-none focus:border-gray-600 rounded py-1 px-2 pl-10 appearance-none leading-normal m-3 w-64`
+              tw`flex flex-wrap bg-gray-900 text-sm text-gray-400 transition border border-gray-800 focus:outline-none focus:border-gray-600 rounded py-1 px-2  appearance-none leading-normal m-3 w-64`
             )}
           />
           <Button
@@ -126,6 +153,30 @@ export const PhoneConfigurations = ({
           >
             {connectionId ? 'End Call' : 'Call'}
           </Button>
+        </div>
+        <div className={css(tw`bg-gray-900 p-5`)}>
+          <label className={css(tw`m-3 text-gray-400`)}>Params</label>
+
+          <input
+            disabled={!!connectionId || calling}
+            onChange={(e) => setDtmf(e.target.value)}
+            type="text"
+            value={dtmf}
+            placeholder="DTMF (Joining code)"
+            className={css(
+              tw`flex flex-wrap bg-gray-900 text-sm text-gray-400 placeholder-gray-600 transition border border-gray-800 focus:outline-none focus:border-gray-600 rounded py-1 px-2 appearance-none leading-normal m-3 w-40`
+            )}
+          />
+          <input
+            disabled={!!connectionId || calling}
+            onChange={(e) => setSummaryEmails(e.target.value)}
+            type="text"
+            value={summaryEmails}
+            placeholder="Summary Emails list (comma separated)"
+            className={css(
+              tw`flex flex-wrap bg-gray-900 text-sm text-gray-400  placeholder-gray-600 transition border border-gray-800 focus:outline-none focus:border-gray-600 rounded py-1 px-2 appearance-none leading-normal m-3 w-80`
+            )}
+          />
         </div>
         {phoneError !== '' ? (
           <label className={css(tw`text-red-300`)}>{phoneError}</label>

@@ -13,16 +13,20 @@ import {
   Link,
 } from '../../components'
 import { useConnection, useConversation, useAuth } from '../../hooks'
-import { Transcripts } from '@symblai/react-elements'
 
 const INSIGHT_TYPES = ['question', 'action_item']
 const Index = () => {
   const [connectionId, setConnectionId] = useConnection()
   const { token } = useAuth()
   const { conversationData, setConversationData } = useConversation()
-  const [liveTranscript, setLiveTranscript] = useState<any[]>([])
+  const [liveTranscript, setLiveTranscript] = useState<any>({})
   const [realtimeData, setRealTimeData] = useState({})
   const [messages, setMessages] = useState<any[]>([])
+  const messagesList = useRef(messages)
+
+  useEffect(() => {
+    messagesList.current = messages
+  }, [messages])
 
   function handleConnection(data: any) {
     console.log('Connection Data', data)
@@ -30,6 +34,7 @@ const Index = () => {
     setConversationData(data)
   }
 
+  console.log(token.accessToken)
   useEffect(() => {
     let ws: any = null
 
@@ -41,8 +46,8 @@ const Index = () => {
       ws.onmessage = (event: MessageEvent) => {
         const data = JSON.parse(event.data)
         if (data.type === 'message_response') {
-          console.log(data.messages)
-          setMessages(data.messages)
+          const oldMsgs = messagesList.current
+          setMessages([...oldMsgs, ...data.messages])
         }
         if (data.type === 'transcript_response') {
           console.log(data.payload.content)
@@ -50,6 +55,7 @@ const Index = () => {
         }
 
         setRealTimeData(data)
+        console.log('Realtime data', data)
       }
     }
 
@@ -78,20 +84,15 @@ const Index = () => {
         insightTypes={INSIGHT_TYPES}
       />
       <ConnectionLabel />
-      <Divider />
       <FlexWrap>
-        <JsonPayloadCard
-          json={realtimeData}
-          title="Realtime data from websocket"
-        >
-          <div>Realtime data</div>
-        </JsonPayloadCard>
-        <JsonPayloadCard json={conversationData} title="Connection data">
-          <div>Realtime data</div>
-        </JsonPayloadCard>
-      </FlexWrap>
-      <Divider />
-      <FlexWrap>
+        <Card title="Live Transcription">
+          <div>
+            <div className="text-gray-500">Live transcription</div>
+            <div>
+              {liveTranscript.payload && liveTranscript.payload.content}
+            </div>
+          </div>
+        </Card>
         <Card title="Messages">
           <div>
             <div className="text-gray-500">
@@ -106,6 +107,18 @@ const Index = () => {
             </ul>
           </div>
         </Card>
+      </FlexWrap>
+      <Divider />
+      <FlexWrap>
+        <JsonPayloadCard
+          json={realtimeData}
+          title="Realtime data from websocket"
+        >
+          <div>Realtime data</div>
+        </JsonPayloadCard>
+        <JsonPayloadCard json={conversationData} title="Connection data">
+          <div>Connection data</div>
+        </JsonPayloadCard>
       </FlexWrap>
     </ProtectedPage>
   )

@@ -38,19 +38,32 @@ export const stopEndpoint = async (connectionId: string) => {
 }
 
 export const startEndpoint = async (
-  phoneNumber: string,
-  insightTypes = [],
+  {
+    type,
+    phoneNumber,
+    dtmf,
+    summaryEmails,
+    insightTypes,
+  }: {
+    type: string
+    phoneNumber: string
+    dtmf: string
+    summaryEmails: string
+    insightTypes: string
+  },
   callback: (data: any) => Promise<void>,
   endCallAfterInSeconds = 300
 ): Promise<any> => {
   try {
     await sdkInit()
-
+    const phoneNumberOrUri =
+      type === 'sip' ? { uri: phoneNumber } : { phoneNumber }
     const connection = await sdk.startEndpoint(
       {
         endpoint: {
-          type: 'pstn',
-          phoneNumber,
+          type,
+          ...phoneNumberOrUri,
+          dtmf,
         },
         intents,
         insightTypes,
@@ -59,7 +72,7 @@ export const startEndpoint = async (
             invokeOn: 'stop',
             name: 'sendSummaryEmail',
             parameters: {
-              emails: ['vnovick@gmail.com'],
+              emails: summaryEmails.split(','),
             },
           },
         ],

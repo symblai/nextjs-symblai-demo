@@ -12,18 +12,25 @@ import {
   FlexWrap,
   JsonPayloadCard,
   Link,
+  AsyncParamsUI,
 } from '../../components'
 
-import { useConversation, useAuth, useAudioAsyncAPI } from '../../hooks'
+import {
+  useConversation,
+  useAudioAsyncAPI,
+  useAsyncApiParams,
+} from '../../hooks'
 import { Transcripts, Topics } from '@symblai/react-elements'
 
 const Index = () => {
-  const { token } = useAuth()
   const { conversationData } = useConversation()
   const [file, setFile] = useState()
   const [audioUrl, setAudioUrl] = useState('')
+
+  const asyncApiParams = useAsyncApiParams()
   const { jobStatus, sentForProcessing } = useAudioAsyncAPI(
-    audioUrl !== '' ? audioUrl : file
+    audioUrl !== '' ? audioUrl : file,
+    asyncApiParams.query
   )
 
   const onAudioSubmit = async (data: FileOrUrlInputSubmitType) => {
@@ -66,6 +73,8 @@ const Index = () => {
       ) : (
         <div className={css(tw`text-blue-400 p-2`)}>{transcodingCaption}</div>
       )}
+      <Divider />
+      <AsyncParamsUI {...asyncApiParams} />
       <Divider />
       <FlexWrap>
         <JsonPayloadCard title="Job Processing data" json={jobStatus}>

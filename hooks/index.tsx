@@ -31,7 +31,10 @@ const MIME_TYPES = {
   wav: 'audio/wave',
 }
 
-export function useAudioAsyncAPI(data: File | string | undefined) {
+export function useAudioAsyncAPI(
+  data: File | string | undefined,
+  query: string
+) {
   const { token } = useAuth()
   const { conversationData, setConversationData } = useConversation()
   const [sentForProcessing, setSentForProcessing] = useState(false)
@@ -49,8 +52,8 @@ export function useAudioAsyncAPI(data: File | string | undefined) {
 
     async function fetchData() {
       const urlAudio = isFile
-        ? 'https://api.symbl.ai/v1/process/audio'
-        : 'https://api.symbl.ai/v1/process/audio/url'
+        ? `https://api.symbl.ai/v1/process/audio${query}`
+        : `https://api.symbl.ai/v1/process/audio/url${query}`
       const requestOptions = {
         method: 'GET',
         headers: {
@@ -173,5 +176,185 @@ export function useMessages() {
   return {
     fetchData,
     data,
+  }
+}
+
+export const useTextAsyncAPI = (data: string) => {
+  const { token } = useAuth()
+  const { conversationData, setConversationData } = useConversation()
+  const [sentForProcessing, setSentForProcessing] = useState(false)
+  const [jobStatus, setJobStatus] = useState(null)
+
+  useEffect(() => {
+    async function fetchData() {
+      const requestTextOptions = {
+        method: 'POST',
+        headers: {
+          'x-api-key': token,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          messages: JSON.parse(data),
+        }),
+      }
+
+      const requestOptions = {
+        method: 'GET',
+        headers: {
+          'x-api-key': token,
+        },
+      }
+
+      async function check(jobId: string) {
+        const checkJob = await fetch(
+          `https://api.symbl.ai/v1/job/${jobId}`,
+          requestOptions
+        )
+        const checkJobJson = await checkJob.json()
+        setJobStatus(checkJobJson)
+        if (checkJobJson.status === 'in_progress') {
+          check(jobId)
+          return
+        } else {
+          setSentForProcessing(false)
+        }
+      }
+      try {
+        if (!jobStatus) {
+          setSentForProcessing(true)
+          const processingResponse = await fetch(
+            'https://api.symbl.ai/v1/process/text',
+            requestTextOptions
+          )
+          console.log(processingResponse)
+          const processingResponseJson = await processingResponse.json()
+          console.log(processingResponseJson)
+          check(processingResponseJson.jobId)
+          setConversationData(processingResponseJson)
+        }
+      } catch (err) {
+        console.error(err, err.message)
+      }
+    }
+
+    data && fetchData().catch((err) => console.log(err.message))
+  }, [data, conversationData, setConversationData])
+
+  return {
+    jobStatus,
+    setJobStatus,
+    sentForProcessing,
+  }
+}
+
+export const useAsyncVideoApi = (
+  data: File | string | undefined,
+  query: string
+) => {
+  const { token } = useAuth()
+  const { conversationData, setConversationData } = useConversation()
+  const [sentForProcessing, setSentForProcessing] = useState(false)
+  const [jobStatus, setJobStatus] = useState(null)
+  useEffect(() => {
+    const isFile = data instanceof File
+
+    async function fetchData() {
+      const urlVideo = isFile
+        ? `https://api.symbl.ai/v1/process/video${query}`
+        : `https://api.symbl.ai/v1/process/video/url${query}`
+      const requestOptions = {
+        method: 'GET',
+        headers: {
+          'x-api-key': token,
+        },
+      }
+      async function getFileOrUrlOptions() {
+        if (isFile) {
+          const file = data
+          const requestOptionsVideo = {
+            method: 'POST',
+            headers: {
+              'x-api-key': token,
+              'Content-Type': 'video/mp4',
+            },
+            body: file,
+            json: true,
+          }
+          return requestOptionsVideo
+        } else {
+          const url = data
+          const requestOptionsVideo = await {
+            method: 'POST',
+            headers: {
+              'x-api-key': token,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              url: url,
+              confidenceThreshold: 0.6,
+              timezoneOffset: 0,
+            }),
+          }
+          return requestOptionsVideo
+        }
+      }
+
+      async function check(jobId: string) {
+        const checkJob = await fetch(
+          `https://api.symbl.ai/v1/job/${jobId}`,
+          requestOptions
+        )
+        const checkJobJson = await checkJob.json()
+        setJobStatus(checkJobJson)
+        if (checkJobJson.status === 'in_progress') {
+          check(jobId)
+          return
+        } else {
+          setSentForProcessing(false)
+        }
+      }
+      try {
+        if (!jobStatus) {
+          setSentForProcessing(true)
+          const requestOptionsVideo = await getFileOrUrlOptions()
+          const processingResponse = await fetch(urlVideo, requestOptionsVideo)
+          console.log(processingResponse)
+          const processingResponseJson = await processingResponse.json()
+          console.log(processingResponseJson)
+          check(processingResponseJson.jobId)
+          setConversationData(processingResponseJson)
+        }
+      } catch (err) {
+        console.error(err, err.message)
+      }
+    }
+
+    data && fetchData().catch((err) => console.log(err.message))
+  }, [data, conversationData, setConversationData])
+
+  return {
+    jobStatus,
+    setJobStatus,
+    sentForProcessing,
+  }
+}
+
+export const useAsyncApiParams = () => {
+  const [customVocabulary, setCustomVocabulary] = useState('')
+  const [enableSpeakerDiarization, setEnableSpeakerDiarization] = useState(
+    false
+  )
+  const [diarizationSpeakerCount, setDiarizationSpeakerCount] = useState(1)
+  const query = enableSpeakerDiarization
+    ? `?enableSpeakerDiarization=true&diarizationSpeakerCount=${diarizationSpeakerCount}&customVocabulary=${customVocabulary}`
+    : ''
+  return {
+    query,
+    customVocabulary,
+    setCustomVocabulary,
+    enableSpeakerDiarization,
+    setEnableSpeakerDiarization,
+    diarizationSpeakerCount,
+    setDiarizationSpeakerCount,
   }
 }
