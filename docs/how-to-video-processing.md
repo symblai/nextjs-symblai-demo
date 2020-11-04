@@ -151,3 +151,11 @@ On this page you will also see this component `<Transcripts conversationId={conv
 This is prebuilt component from `@symblai/react-elements` package. As soon as you provide it with `conversationId`, It will nicely render conversation transcripts. There is also `<Topics conversationId={conversationData.conversationId}/>` component that will do the same but for topics.
 
 ### Passing additional Async API parameters to get more granular insights
+
+We can pass various parameters to improve processing of audio files. These parameters can be passed as a query string.
+Such parameters include:
+
+- `customVocabulary` - Contains a list of words and phrases that provide hints to the speech recognition task.
+- `detectActionPhraseForMessages` - Accepted values are true & false. It shows Actionable Phrases in each sentence of conversation. These sentences can be found in the Conversation's [Messages API](https://docs.symbl.ai/#get-messages-transcript).
+
+Diarization parameters. You can read more about them [here](https://docs.symbl.ai/#audio-api)
