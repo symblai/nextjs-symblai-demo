@@ -12,6 +12,7 @@ import {
   FlexWrap,
   JsonPayloadCard,
   Link,
+  ParamsToggle,
   AsyncParamsUI,
 } from '../../components'
 
@@ -74,7 +75,9 @@ const Index = () => {
         <div className={css(tw`text-blue-400 p-2`)}>{transcodingCaption}</div>
       )}
       <Divider />
-      <AsyncParamsUI {...asyncApiParams} />
+      <ParamsToggle>
+        <AsyncParamsUI {...asyncApiParams} />
+      </ParamsToggle>
       <Divider />
       <FlexWrap>
         <JsonPayloadCard title="Job Processing data" json={jobStatus}>

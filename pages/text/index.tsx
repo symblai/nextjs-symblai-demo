@@ -10,6 +10,7 @@ import {
   JsonPayloadCard,
   Card,
   ProtectedPage,
+  ChatComponent,
 } from '../../components'
 import { useConnection, useConversation, useTextAsyncAPI } from '../../hooks'
 import { Transcripts, Topics } from '@symblai/react-elements'
@@ -17,10 +18,7 @@ import { Transcripts, Topics } from '@symblai/react-elements'
 const Index = () => {
   const [connectionId] = useConnection()
   const { conversationData } = useConversation()
-  const [liveTranscript, setLiveTranscript] = useState('')
-  const [messages, setMessages] = useState<any[]>([])
-  const [insights, setInsights] = useState<any[]>([])
-  const [text, setText] = useState('')
+  const [text, setText] = useState()
   const [textToProcess, setTextToProcess] = useState('')
   const { jobStatus, sentForProcessing } = useTextAsyncAPI(textToProcess)
 
@@ -44,28 +42,33 @@ const Index = () => {
           className={css(tw`text-indigo-300`)}
         >{`connectionId ${connectionId}`}</label>
       ) : null}
-
       <FlexWrap>
-        <div className={css(tw`w-full h-64`)}>
+        <ChatComponent
+          payload={JSON.stringify(text)}
+          onChange={(jsonPayload: any) => {
+            setText(jsonPayload)
+          }}
+        />
+        <div className={css(tw`w-1/2 flex-1`)}>
           <textarea
             className={css(
               tw`bg-gray-900 text-sm text-gray-400 transition border border-gray-800 focus:outline-none focus:border-gray-600 rounded py-1 px-2 pl-10 appearance-none leading-normal m-3 w-full h-full`
             )}
-            value={text}
-            onChange={(e) => setText(e.target.value)}
+            value={JSON.stringify(text, null, 2)}
+            onChange={(e) => setText(JSON.parse(e.target.value))}
           ></textarea>
         </div>
-        <Button
-          disabled={sentForProcessing}
-          onClick={() => {
-            setTextToProcess(text)
-          }}
-        >
-          {!sentForProcessing
-            ? `Submit messages insights for processing`
-            : 'Processing'}
-        </Button>
       </FlexWrap>
+      <Button
+        disabled={sentForProcessing}
+        onClick={() => {
+          setTextToProcess(JSON.stringify(text))
+        }}
+      >
+        {!sentForProcessing
+          ? `Submit messages insights for processing`
+          : 'Processing'}
+      </Button>
       <Divider />
       <FlexWrap>
         <JsonPayloadCard title="Job Processing data" json={jobStatus}>

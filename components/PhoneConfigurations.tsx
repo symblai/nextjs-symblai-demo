@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { css } from '@emotion/css'
 import tw from '@tailwindcssinjs/macro'
 import PhoneNumber from 'awesome-phonenumber'
-import { Button, Divider } from '../components'
+import { Button, ParamsToggle } from '../components'
 import { useConnection, useConversation, useAuth } from '../hooks'
 
 export const PhoneConfigurations = ({
@@ -154,30 +154,32 @@ export const PhoneConfigurations = ({
             {connectionId ? 'End Call' : 'Call'}
           </Button>
         </div>
-        <div className={css(tw`bg-gray-900 p-5`)}>
-          <label className={css(tw`m-3 text-gray-400`)}>Params</label>
+        <ParamsToggle>
+          <>
+            <label className={css(tw`m-3 text-gray-400`)}>Params</label>
 
-          <input
-            disabled={!!connectionId || calling}
-            onChange={(e) => setDtmf(e.target.value)}
-            type="text"
-            value={dtmf}
-            placeholder="DTMF (Joining code)"
-            className={css(
-              tw`flex flex-wrap bg-gray-900 text-sm text-gray-400 placeholder-gray-600 transition border border-gray-800 focus:outline-none focus:border-gray-600 rounded py-1 px-2 appearance-none leading-normal m-3 w-40`
-            )}
-          />
-          <input
-            disabled={!!connectionId || calling}
-            onChange={(e) => setSummaryEmails(e.target.value)}
-            type="text"
-            value={summaryEmails}
-            placeholder="Summary Emails list (comma separated)"
-            className={css(
-              tw`flex flex-wrap bg-gray-900 text-sm text-gray-400  placeholder-gray-600 transition border border-gray-800 focus:outline-none focus:border-gray-600 rounded py-1 px-2 appearance-none leading-normal m-3 w-80`
-            )}
-          />
-        </div>
+            <input
+              disabled={!!connectionId || calling}
+              onChange={(e) => setDtmf(e.target.value)}
+              type="text"
+              value={dtmf}
+              placeholder="DTMF (Joining code)"
+              className={css(
+                tw`flex flex-wrap bg-gray-900 text-sm text-gray-400 placeholder-gray-600 transition border border-gray-800 focus:outline-none focus:border-gray-600 rounded py-1 px-2 appearance-none leading-normal m-3 w-40`
+              )}
+            />
+            <input
+              disabled={!!connectionId || calling}
+              onChange={(e) => setSummaryEmails(e.target.value)}
+              type="text"
+              value={summaryEmails}
+              placeholder="Summary Emails list (comma separated)"
+              className={css(
+                tw`flex flex-wrap bg-gray-900 text-sm text-gray-400  placeholder-gray-600 transition border border-gray-800 focus:outline-none focus:border-gray-600 rounded py-1 px-2 appearance-none leading-normal m-3 w-80`
+              )}
+            />
+          </>
+        </ParamsToggle>
         {phoneError !== '' ? (
           <label className={css(tw`text-red-300`)}>{phoneError}</label>
         ) : null}

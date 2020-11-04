@@ -40,14 +40,6 @@ export function useAudioAsyncAPI(
   const [sentForProcessing, setSentForProcessing] = useState(false)
   const [jobStatus, setJobStatus] = useState(null)
   useEffect(() => {
-    const controller = new AbortController()
-    async function transcodeFile(_file: File) {
-      // tslint:disable-next-line
-      const transcoder = new (Transcoder as any)()
-      const transcodedFile = await transcoder.load(_file)
-      return transcodedFile
-    }
-
     const isFile = data instanceof File
 
     async function fetchData() {
@@ -63,15 +55,13 @@ export function useAudioAsyncAPI(
       async function getFileOrUrlOptions() {
         if (isFile) {
           const file = data
-          const transcodedFile: any = await transcodeFile(file as File)
           const requestOptionsAudio = {
             method: 'POST',
             headers: {
               'x-api-key': token,
               'Content-Type': MIME_TYPES['mp3'],
             },
-            body: transcodedFile,
-            signal: controller.signal,
+            body: file,
           }
           return requestOptionsAudio
         } else {
@@ -121,9 +111,6 @@ export function useAudioAsyncAPI(
     }
 
     data && fetchData().catch((err) => console.log(err.message))
-    return () => {
-      controller.abort()
-    }
   }, [data, conversationData, setConversationData])
 
   return {
@@ -193,9 +180,7 @@ export const useTextAsyncAPI = (data: string) => {
           'x-api-key': token,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          messages: JSON.parse(data),
-        }),
+        body: data,
       }
 
       const requestOptions = {
@@ -341,13 +326,25 @@ export const useAsyncVideoApi = (
 
 export const useAsyncApiParams = () => {
   const [customVocabulary, setCustomVocabulary] = useState('')
+  const [
+    detectActionPhraseForMessages,
+    setDetectActionPhraseForMessages,
+  ] = useState(false)
   const [enableSpeakerDiarization, setEnableSpeakerDiarization] = useState(
     false
   )
   const [diarizationSpeakerCount, setDiarizationSpeakerCount] = useState(1)
-  const query = enableSpeakerDiarization
+  let query = enableSpeakerDiarization
     ? `?enableSpeakerDiarization=true&diarizationSpeakerCount=${diarizationSpeakerCount}&customVocabulary=${customVocabulary}`
     : ''
+
+  query =
+    query && detectActionPhraseForMessages
+      ? query + '&detectActionPhraseForMessages=true'
+      : detectActionPhraseForMessages
+      ? '?detectActionPhraseForMessages=true'
+      : query
+
   return {
     query,
     customVocabulary,
@@ -356,5 +353,6 @@ export const useAsyncApiParams = () => {
     setEnableSpeakerDiarization,
     diarizationSpeakerCount,
     setDiarizationSpeakerCount,
+    setDetectActionPhraseForMessages,
   }
 }

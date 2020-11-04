@@ -1303,10 +1303,10 @@
     "@nodelib/fs.scandir" "2.1.3"
     fastq "^1.6.0"
 
-"@symblai/react-elements@^0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@symblai/react-elements/-/react-elements-0.2.0.tgz#10266f1bf09d3682ed92a8eda8f051a14e0c5abc"
-  integrity sha512-3vlYoZYX9f583b4A2AILLdZxc/fHV2rKk0Ib0FM/bThDQbLCt5I6fooMSglNxL6jaMrGT35NMNcgnpzIAV5RLg==
+"@symblai/react-elements@^0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@symblai/react-elements/-/react-elements-0.4.0.tgz#aaa262af09e0752563dd7b1fc49f5e65d6df7d1c"
+  integrity sha512-OJQnoWnk31Lm7mtVYtLbt9XDaUBMKtc60odDmGz59ZrYnt6ARH1vd1olg3l5vnH2NdA+yf2ghMSlmY3foELF4g==
 
 "@tailwindcss/custom-forms@^0.2.1":
   version "0.2.1"

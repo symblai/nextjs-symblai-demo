@@ -71,25 +71,6 @@ const { jobStatus, sentForProcessing } = useAudioAsyncAPI(
 
 and based on file/url change will start the following flow
 
-#### 1. Transcoding audio file
-
-You will see the following function defined within `useEffect`
-
-```typescript
-async function transcodeFile(_file: File) {
-  // tslint:disable-next-line
-  const transcoder = new (Transcoder as any)()
-  const transcodedFile = await transcoder.load(_file)
-  return transcodedFile
-}
-```
-
-We will also create a new `AbortController` to abort transcoding and also to send `controller.signal` to Symbl API
-
-```javascript
-const controller = new AbortController()
-```
-
 2. #### Get Request parameters for either file or url
 
 We will also define a function to conditionally get different request parameters that we need to send in our REST call. After all there is a difference whether we send a file or URL
@@ -98,15 +79,13 @@ We will also define a function to conditionally get different request parameters
 async function getFileOrUrlOptions() {
   if (isFile) {
     const file = data
-    const transcodedFile: any = await transcodeFile(file as File)
     const requestOptionsAudio = {
       method: 'POST',
       headers: {
         'x-api-key': token,
         'Content-Type': MIME_TYPES['mp3'],
       },
-      body: transcodedFile,
-      signal: controller.signal,
+      body: file,
     }
     return requestOptionsAudio
   } else {

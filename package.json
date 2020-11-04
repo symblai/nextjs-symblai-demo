@@ -16,7 +16,7 @@
     "@emotion/react": "^11.0.0-next.12",
     "@emotion/styled": "^11.0.0-next.12",
     "@ffmpeg/ffmpeg": "^0.8.3",
-    "@symblai/react-elements": "^0.2.0",
+    "@symblai/react-elements": "^0.4.0",
     "@types/": "ffmpeg/ffmpeg",
     "@types/react-typist": "^2.0.1",
     "@types/socket.io": "^2.1.11",

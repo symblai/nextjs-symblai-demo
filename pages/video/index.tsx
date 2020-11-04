@@ -14,6 +14,7 @@ import {
   ConversationCard,
   VideoMessages,
   AsyncParamsUI,
+  ParamsToggle,
 } from '../../components'
 import { Transcripts, Topics } from '@symblai/react-elements'
 import {
@@ -104,7 +105,9 @@ const Index = () => {
       ) : (
         <div className={css(tw`text-blue-400 p-2`)}>{caption}</div>
       )}
-      <AsyncParamsUI {...asyncApiParams} />
+      <ParamsToggle>
+        <AsyncParamsUI {...asyncApiParams} />
+      </ParamsToggle>
       <FlexWrap>
         <video
           id="video-summary"

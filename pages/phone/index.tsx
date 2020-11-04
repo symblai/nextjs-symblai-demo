@@ -12,6 +12,7 @@ import {
   ConnectionLabel,
   Link,
 } from '../../components'
+import { Transcripts, Topics } from '@symblai/react-elements'
 import { useConnection, useConversation, useAuth } from '../../hooks'
 
 const INSIGHT_TYPES = ['question', 'action_item']
@@ -34,7 +35,6 @@ const Index = () => {
     setConversationData(data)
   }
 
-  console.log(token.accessToken)
   useEffect(() => {
     let ws: any = null
 

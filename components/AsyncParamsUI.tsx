@@ -9,6 +9,8 @@ export const AsyncParamsUI = ({
   setDiarizationSpeakerCount,
   customVocabulary,
   setCustomVocabulary,
+  detectActionPhraseForMessages,
+  setDetectActionPhraseForMessages,
 }: any) => {
   return (
     <div className={css(tw`p-2`)}>
@@ -64,6 +66,23 @@ export const AsyncParamsUI = ({
             setCustomVocabulary(e.target.value)
           }}
         />
+      </div>
+      <div>
+        <input
+          type="checkbox"
+          id="detectActionPhraseForMessages"
+          name="detectActionPhraseForMessages"
+          checked={detectActionPhraseForMessages}
+          onClick={(e) => {
+            setDetectActionPhraseForMessages(!detectActionPhraseForMessages)
+          }}
+        />
+        <label
+          className={css(tw`text-gray-400 p-2`)}
+          htmlFor="detectActionPhraseForMessages"
+        >
+          detectActionPhraseForMessages
+        </label>
       </div>
     </div>
   )
