@@ -6,7 +6,16 @@ Your credentials include your appId and appSecret. You can find them on the home
 
 ![](https://docs.symbl.ai/images/credentials-faf6f434.png)
 
-add credentials to `.env` file filling in `APP_ID` and `APP_SECRET` variables.
+add credentials to `next-config.js` file filling in `APP_ID` and `APP_SECRET` variables.
+
+```javascript
+module.exports = {
+  env: {
+    APP_ID: '',
+    APP_SECRET: '',
+  },
+}
+```
 
 ### Authenticating
 
@@ -111,6 +120,16 @@ async function getFileOrUrlOptions() {
 
 Here we define a function to conditionally get different request parameters that we need to send in our REST call. After all there is a difference whether we send a file or URL
 
+2. Getting Symbl async Video API endpoint.
+
+Async API endpoint for video processing will change based on whether it's url or file:
+
+```javascript
+const urlVideo = isFile
+  ? `https://api.symbl.ai/v1/process/video${query}`
+  : `https://api.symbl.ai/v1/process/video/url${query}`
+```
+
 3. #### Use Job API to poll for job status.
 
 Previously we mentioned that there should be some kind of polling mechanism to check whether the job is finished or not. Symbl has [Job API](https://docs.symbl.ai/#job-api) That we can use for that.
@@ -132,13 +151,13 @@ async function check(jobId: string) {
 }
 ```
 
-So the flow will be:
+4. Execution flow will be:
 
 ```typescript
-//Transcode and get Parameters
+//Get request Parameters
 const requestOptionsVideo = await getFileOrUrlOptions()
 // Execute the request
-const processingResponse = await fetch(urlAudio, requestOptionsVideo)
+const processingResponse = await fetch(urlVideo, requestOptionsVideo)
 const processingResponseJson = await processingResponse.json()
 // Check Job Status
 check(processingResponseJson.jobId)
@@ -152,7 +171,7 @@ This is prebuilt component from `@symblai/react-elements` package. As soon as yo
 
 ### Passing additional Async API parameters to get more granular insights
 
-We can pass various parameters to improve processing of audio files. These parameters can be passed as a query string.
+We can pass various parameters to improve processing of video files. These parameters can be passed as a query string.
 Such parameters include:
 
 - `customVocabulary` - Contains a list of words and phrases that provide hints to the speech recognition task.

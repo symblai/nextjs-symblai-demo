@@ -8,7 +8,16 @@ Your credentials include your appId and appSecret. You can find them on the home
 
 ![](https://docs.symbl.ai/images/credentials-faf6f434.png)
 
-add credentials to `.env` file filling in `APP_ID` and `APP_SECRET` variables.
+add credentials to `next-config.js` file filling in `APP_ID` and `APP_SECRET` variables.
+
+```javascript
+module.exports = {
+  env: {
+    APP_ID: '',
+    APP_SECRET: '',
+  },
+}
+```
 
 ### Authenticating
 

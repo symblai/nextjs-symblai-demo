@@ -87,7 +87,11 @@ const Index = () => {
       <FlexWrap>
         <Card title="Live Transcription">
           <div>
-            <div className="text-gray-500">Live transcription</div>
+            <div className="text-gray-500">
+              here you see live transcripts as they are parsed by symbl.
+              Meaningful ones will be parsed as messages and appear in messages
+              stream
+            </div>
             <div>
               {liveTranscript.payload && liveTranscript.payload.content}
             </div>
@@ -108,6 +112,52 @@ const Index = () => {
           </div>
         </Card>
       </FlexWrap>
+      <Divider />
+      <h1 className={css(tw`text-white text-xl p-8 justify-center flex`)}>
+        Symbl React Elements library
+      </h1>
+      <Divider />
+      <FlexWrap>
+        <Card title="Transcriptions using Symbl react elements">
+          <div>
+            <div className="text-gray-500">
+              This UI is using predefined Transcripts element from{' '}
+              <a
+                href="https://www.npmjs.com/package/@symblai/react-elements"
+                className={css(tw`text-blue-400`)}
+              >
+                @symblai/react-elements
+              </a>
+            </div>
+            <div className={css(tw`pt-4`)}>
+              {messages && <Transcripts messages={messages} />}
+            </div>
+          </div>
+        </Card>
+        <Card title="Topics using Symbl react elements">
+          <div>
+            <div className="text-gray-500">
+              This UI is using predefined Topics element from{' '}
+              <a
+                href="https://www.npmjs.com/package/@symblai/react-elements"
+                className={css(tw`text-blue-400`)}
+              >
+                @symblai/react-elements
+              </a>
+            </div>
+            <div className={css(tw`pt-4`)}>
+              {conversationData && conversationData.conversationId && (
+                <Topics conversationId={conversationData.conversationId} />
+              )}
+            </div>
+          </div>
+        </Card>
+      </FlexWrap>
+
+      <Divider />
+      <h1 className={css(tw`text-white text-xl p-8 justify-center flex`)}>
+        Raw Data
+      </h1>
       <Divider />
       <FlexWrap>
         <JsonPayloadCard

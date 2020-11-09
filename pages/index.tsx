@@ -3,17 +3,26 @@ import { PhoneConfigurations } from '../components/PhoneConfigurations'
 import { css } from '@emotion/css'
 import tw from '@tailwindcssinjs/macro'
 import io from 'socket.io-client'
-import { Link, Card, TypingIntro, Divider, FlexWrap } from '../components'
+import {
+  Link,
+  Card,
+  TypingIntro,
+  Divider,
+  FlexWrap,
+  JsonPayloadCard,
+} from '../components'
 import { useConnection, useConversation } from '../hooks'
+import { Transcripts, Topics } from '@symblai/react-elements'
 
 const Index = () => {
   const [connectionId] = useConnection()
   const [liveTranscript, setLiveTranscript] = useState('')
+  const [realtimeData, setRealTimeData] = useState({})
   const [messages, setMessages] = useState<any[]>([])
   const [insights, setInsights] = useState<any[]>([])
   const messagesList = useRef(messages)
   const insightsList = useRef(insights)
-
+  const { conversationData, setConversationData } = useConversation()
   useEffect(() => {
     messagesList.current = messages
     insightsList.current = insights
@@ -34,6 +43,8 @@ const Index = () => {
 
         socket.on('realtimeEvent', (data: any) => {
           console.log('Real time event', data)
+          setRealTimeData(data)
+          setConversationData(data)
           if (data.type === 'transcript_response') {
             setLiveTranscript(data.payload.content)
           }
@@ -111,6 +122,63 @@ const Index = () => {
             </ul>
           </div>
         </Card>
+      </FlexWrap>
+      <Divider />
+      <h1 className={css(tw`text-white text-xl p-8 justify-center flex`)}>
+        Symbl React Elements library
+      </h1>
+      <Divider />
+      <FlexWrap>
+        <Card title="Transcriptions using Symbl react elements">
+          <div>
+            <div className="text-gray-500">
+              This UI is using predefined Transcripts element from{' '}
+              <a
+                href="https://www.npmjs.com/package/@symblai/react-elements"
+                className={css(tw`text-blue-400`)}
+              >
+                @symblai/react-elements
+              </a>
+            </div>
+            <div className={css(tw`pt-4`)}>
+              {messages && <Transcripts messages={messages} />}
+            </div>
+          </div>
+        </Card>
+        <Card title="Topics using Symbl react elements">
+          <div>
+            <div className="text-gray-500">
+              This UI is using predefined Topics element from{' '}
+              <a
+                href="https://www.npmjs.com/package/@symblai/react-elements"
+                className={css(tw`text-blue-400`)}
+              >
+                @symblai/react-elements
+              </a>
+            </div>
+            <div className={css(tw`pt-4`)}>
+              {conversationData && conversationData.conversationId && (
+                <Topics conversationId={conversationData.conversationId} />
+              )}
+            </div>
+          </div>
+        </Card>
+      </FlexWrap>
+      <Divider />
+      <h1 className={css(tw`text-white text-xl p-8 justify-center flex`)}>
+        Raw Data
+      </h1>
+      <Divider />
+      <FlexWrap>
+        <JsonPayloadCard
+          json={realtimeData}
+          title="Realtime data from websocket"
+        >
+          <div>Realtime data</div>
+        </JsonPayloadCard>
+        <JsonPayloadCard json={conversationData} title="Connection data">
+          <div>Connection data</div>
+        </JsonPayloadCard>
       </FlexWrap>
     </>
   )

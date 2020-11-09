@@ -6,7 +6,16 @@ Your credentials include your appId and appSecret. You can find them on the home
 
 ![](https://docs.symbl.ai/images/credentials-faf6f434.png)
 
-add credentials to `.env` file filling in `APP_ID` and `APP_SECRET` variables.
+add credentials to `next-config.js` file filling in `APP_ID` and `APP_SECRET` variables.
+
+```javascript
+module.exports = {
+  env: {
+    APP_ID: '',
+    APP_SECRET: '',
+  },
+}
+```
 
 ### Authenticating
 
@@ -76,7 +85,10 @@ Text async API is built for particular format of messages list that you can uplo
 ]
 ```
 
-So we will have a textarea on the page where you can paste you content. Then in order to process it, you need to click `Submit for processing` button. Once you do that, there are several things that happen
+So we will have a textarea on the page where you can paste you content. Then in order to process it, you need to click `Submit for processing` button.
+For convenience we will also have "chat like" UI which we can use to build the json in the format mentioned above and submit it for processing.
+
+Once you do that, there are several things that happen
 
 #### 1. Get Relevant params for Video URL or file
 
