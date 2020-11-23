@@ -1,10 +1,22 @@
-In this How to guide, we will see how we can use Symbl REST telephony API to call on the phone or meeting url and get live transcription using websockets.
+## Introduction
+
+In this How to guide, we will see how we can use Symbl [telephony API](https://docs.symbl.ai/#real-time-telephony-api) to call on the phone or meeting url and get live transcription in NextJS app. Symbl comes with NodeJS api, so same thing we can get by using NodeJS SDK on the server side since there are some use cases that you would want to use particularly server side.For example if you want to do some business logic decisions based on the data received from symbl.
+
+The main flow that we want to achieve is that you can enter your phone number in UI and hit on ![](./imgs/call.png) button.
+
+This is how the UI of the demo app will look like:
+
+![text page screenshot](./imgs/nodeui.png)
+
+In addition to phone number, you can actually select whether you want to use Public Switched Telephony Networks (PSTN) or Session Initaition Protocol (SIP). You will be also able to add advanced params such as DTMF code or Summary email, where to send insights summary once conversation is finished
 
 ## Get Started
 
+We won't dive into all details of implementing NextJS app from scratch, so you always can check the [demo app code](https://github.com/symblai/nextjs-symblai-demo) for more info. Also feel free to open issues asking questions or writing suggestions.
+
 #### Retrieve your credentials
 
-Your credentials include your appId and appSecret. You can find them on the home page of the platform.
+In order to use Symbl API, you need to sign up and get your credentials. They include your `appId` and `appSecret`. You can find them on the home page of the platform.
 
 ![](https://docs.symbl.ai/images/credentials-faf6f434.png)
 
@@ -19,9 +31,21 @@ module.exports = {
 }
 ```
 
+In order to see demo app in action, you can clone the repo, run `yarn` and then `yarn dev`.
+
+Page you are looking for this tutorial is `/phone` or this [file](https://github.com/symblai/nextjs-symblai-demo/blob/master/pages/phone/index.tsx)
+
+At first you will see the following. ![](./imgs/notlogged.png)
+
+In order to see the app we will need to login.
+
 ### Authenticating
 
-When using REST API, we would need to pass auth token in header. For that we've created component `ProtectedPage`. This component executes Symbl specific REST endpoint, to retrieve auth token and store it in context. Later on we can retrieve this token from the helper hook `useAuth`
+When using REST API, we would need to pass auth token in header. For that we've created component `ProtectedPage`. This component executes Symbl specific REST endpoint, to retrieve auth token and store it in context.
+
+Later on we can retrieve this token from the helper hook `useAuth` which is basically a wrapper for `useContext`.
+
+`export const useAuth = () => useContext(AuthContext)`
 
 This is how we would retrieve the token:
 
@@ -160,3 +184,20 @@ We will get either `transcript_response` type or `message_response` type or `ins
 ```
 
 Now what is left is to render UI based on what data we get.
+
+## Summary
+
+In this How To we've briefly walked you through the key points and flows that should be implemented in order to use [Symbl Telephony API](https://docs.symbl.ai/#real-time-telephony-api) and start a phone call and subscribe to real time updates.
+Even though the code shared in this How To is React specific, The general flow can be used with any framework
+
+1. Authenticate and get the token
+2. Call Telephoni API REST endpoint with correct parameters
+
+```javascript
+const endpoint = 'https://api.symbl.ai/v1/endpoint:connect'
+```
+
+3. Get as a response `conversationId`
+4. Use [Conversation API](https://docs.symbl.ai/#conversation-api) to get insights about the text.
+
+You can read more about Telephoni API [here](https://docs.symbl.ai/#real-time-telephony-api)

@@ -1,10 +1,22 @@
+## Introduction
+
 In this How to guide, we will see how we can use Symbl node sdk to call on the phone or meeting url and get live transcription in NextJS app, particularly on the server side. Symbl comes with REST api, so same thing we can get by calling specific endpoint on the client side, but there are some use cases that you would want to use particularly server side.For example if you want to do some business logic decisions based on the data received from symbl.
+
+The main flow that we want to achieve is that you can enter your phone number in UI and hit on ![](./imgs/call.png) button.
+
+This is how the UI of the demo app will look like:
+
+![text page screenshot](./imgs/nodeui.png)
+
+In addition to phone number, you can actually select whether you want to use Public Switched Telephony Networks (PSTN) or Session Initaition Protocol (SIP). You will be also able to add advanced params such as DTMF code or Summary email, where to send insights summary once conversation is finished
 
 ## Get Started
 
+We won't dive into all details of implementing NextJS app from scratch, so you always can check the [demo app code](https://github.com/symblai/nextjs-symblai-demo) for more info. Also feel free to open issues asking questions or writing suggestions.
+
 #### Retrieve your credentials
 
-Your credentials include your appId and appSecret. You can find them on the home page of the platform.
+In order to use Symbl API, you need to sign up and get your credentials. They include your `appId` and `appSecret`. You can find them on the home page of the platform.
 
 ![](https://docs.symbl.ai/images/credentials-faf6f434.png)
 
@@ -18,6 +30,10 @@ module.exports = {
   },
 }
 ```
+
+In order to see demo app in action, you can clone the repo, run `yarn` and then `yarn dev`.
+
+Page you are looking for this tutorial is `/` or this [file](https://github.com/symblai/nextjs-symblai-demo/blob/master/pages/index.tsx)
 
 ## Create NextJS API routes
 
@@ -357,3 +373,10 @@ Response that we will get will be either `transcript_response` type or `message_
 ```
 
 Now what is left is to render UI based on what data we get.
+
+## Summary
+
+In this How To we've briefly walked you through the key points and flows that should be implemented in order to use Symbl Node SDK to use Telephony API and start a phone call and subscribe to real time updates. It's up to you how to bring this data from the server to the client and even though in this example we've used socket.io to push the data from server to client, it's up to you what and how to implement passing data from server to client.
+Even though the code shared in this How To is React specific, The NodeJS call in generic enough to use it with any UI framework.
+
+You can read more about Node SDK [here](https://docs.symbl.ai/#symbl-sdk-node-js)

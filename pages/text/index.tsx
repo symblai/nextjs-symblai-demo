@@ -24,10 +24,7 @@ const Index = () => {
 
   return (
     <ProtectedPage>
-      <TypingIntro>
-        Text Insights capabilities are available, but not presented here in the
-        app yet.
-      </TypingIntro>
+      <TypingIntro>Get insights from text format</TypingIntro>
       <Divider />
       <Link href="https://docs.symbl.ai/#text-api">
         The Async Text API allows you to process any text payload to get the
@@ -35,7 +32,7 @@ const Index = () => {
         case where you have access to the textual content of a type of
         conversation, and you want to extract the insightful items supported by
         the Conversation API. If you want to add more content to the same
-        conversation, use PUT Async Text API.
+        conversation, use PUT Async Text API. You can read more about Text API
       </Link>
       {connectionId ? (
         <label

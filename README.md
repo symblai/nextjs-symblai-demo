@@ -37,7 +37,18 @@ Symbl has REST API to do majority of things like getting insights, processing au
 
 # Running app locally
 
-To Run app locally make sure to add your credentials to `.env` and run `yarn` or `npm install`. To run the app, use `yarn dev`
+add credentials to `next-config.js` file filling in `APP_ID` and `APP_SECRET` variables.
+
+```javascript
+module.exports = {
+  env: {
+    APP_ID: '',
+    APP_SECRET: '',
+  },
+}
+```
+
+run `yarn` or `npm install`. To run the app, use `yarn dev`
 
 Relevant docs section:
 
