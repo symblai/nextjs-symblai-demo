@@ -1,71 +1,85 @@
-# This is a Demo app showcasing Symbl.AI capabilities
+# Symbl.ai Next.js Demo
 
-Symbl is a comprehensive suite of APIs for analyzing natural human conversations - both for your team’s internal conversations and of course the conversations you are having with your customers. Built on our Contextual Conversation Intelligence (C2I) technology, the APIs enable you to rapidly incorporate human-level understanding that goes beyond simple natural language processing of voice and text conversations.
+[![telephony](https://img.shields.io/badge/symbl-telephony-blue)](https://docs.symbl.ai/docs/telephony/overview/post-api)
+[![async-text](https://img.shields.io/badge/symbl-async--text-9cf)](https://docs.symbl.ai/docs/async-api/overview/text/post-text)
+[![async-video](https://img.shields.io/badge/symbl-async--video-%231F618D)](https://docs.symbl.ai/docs/async-api/overview/video/post-video)
+[![async-audio](https://img.shields.io/badge/symbl-async--audio-%2358D68D)](https://docs.symbl.ai/docs/async-api/overview/audio/post-audio)
+[![symbl-react-elements](https://img.shields.io/badge/symbl-react--elements-yellow)](https://docs.symbl.ai/docs/symbl-elements)
+[![sdk](https://img.shields.io/badge/symbl-sdk-blueviolet)](https://docs.symbl.ai/docs/javascript-sdk/overview/introduction)
 
-# Getting started
 
-To get started, you’ll need your account credentials and Node.js installed (> v8.x) on your machine.
+Symbl's APIs empower developers to enable: 
+- **Real-time** analysis of free-flowing discussions to automatically surface highly relevant summary discussion topics, contextual insights, suggestive action items, follow-ups, decisions, and questions.
+- **Voice APIs** that makes it easy to add AI-powered conversational intelligence to either [telephony][telephony] or [WebSocket][websocket] interfaces.
+- **Conversation APIs** that provide a REST interface for managing and processing your conversation data.
+- **Summary UI** with a fully customizable and editable reference experience that indexes a searchable transcript and shows generated actionable insights, topics, timecodes, and speaker information.
 
-Your credentials include your appId and appSecret. You can find them on the home page of the platform.
+<hr />
 
-![App ID](https://docs.symbl.ai/images/credentials-faf6f434.png)
+## This is a Demo app showcasing Symbl.ai capabilities using [ReactJS](https://reactjs.org/), [Typescript](https://www.typescriptlang.org/), and [NextJS](https://nextjs.org/)
 
-After you retrieve them, you need to set them up under `.env` file in this repo
+<hr />
 
-```
-APP_ID=
-APP_SECRET=
-```
+ * [Setup](#setup)
+ * [Integration](#integration) 
+ * [Conclusion](#conclusion)
+ * [Community](#community)
+ 
+## Setup 
+The first step to getting setup is to [sign up][signup] with Symbl.ai. 
 
-## About this app.
+### Authorization
 
-This app is using [ReactJS](https://reactjs.org/), [Typescript](https://www.typescriptlang.org/) and [NextJS](https://nextjs.org/). Let's take a look at folder structure
+1. Create a .env file in the root directory using the [.env.sample](./.env.sample) as an example.
+2. Update the .env file with the following:
+    * Your App Id that you can get from [Platform](https://platform.symbl.ai)
+    * Your App Secret that you can get from [Platform](https://platform.symbl.ai)
 
-- `pages` In Next.js, a page is a React Component exported from a `.js`, `.jsx`, `.ts`, or `.tsx` file in the pages directory. Each page is associated with a route based on its file name. You can read more about how NextJS works with pages [here](https://nextjs.org/docs/basic-features/pages)
+### Install & Deploy
 
-- `pages/api` here reside NextJS API routes. Here we have `call` and `subscribeToPhoneEvents` routes that will be translated to `/api/call` and `/api/subscribeToPhoneEvents` paths in the browser. In this routes we showcase how you can use Symbl Node SDK to get realtime data from API. You can read more about NodeSDK [here](https://docs.symbl.ai/#symbl-sdk-node-js) or read a how to guide [here](https://docs.symbl.ai/#get-live-transcription-phone-call-node-js-telephony)
+1. Run `yarn install` or `npm install`.
+2. To run the app use `yarn dev`.
+3. Navigate to `localhost:3000` to view the app.
 
-### Index page
 
-On the first page of the app we showcase how you can call to your phone number (or meeting number) by providing the phone and multiple parameters. You will get conversational insights, transcriptions, messages, which `Symbl.ai` gets from this call. Architecture looks similar to this:
+## Integration 
 
-![](https://docs.symbl.ai/images/tutorial_phone_integration-f54ba415.png)
+### Project Structure
 
-### REST API
+* `pages` In Next.js, a page is a React Component exported from a `.js`, `.jsx`, `.ts`, or `.tsx` file in the pages directory. Each page is associated with a route based on its file name. You can read more about how works with [pages](https://nextjs.org/docs/basic-features/pages).  Each tab in the application corresponds to the following pages subdirectories
+    * `pages/api` => Phone Call
+    * `pages/audio` => Phone(Client Only)
+    * `pages/conversations` => Conversation data
+    * `pages/text` => Text
+    * `pages/audio` => Audio
+    * `pages/video` => Video
 
-Symbl has REST API to do majority of things like getting insights, processing audio, video and text, get conversation data and much more. Rest of the pages of the app are focused on this API and showcase different use cases of Symbl from getting tasks and questions from existing conversation to uploading and processing video and audio files. You can even get transcriptions from the video and by clicking on these transcriptions, navigate to specific parts of the video. You can see this behavior on `/video` page.
+## Conclusion 
 
-# Running app locally
+When implemented this application offers options to explore the following Symbl.ai features accessible via tabs at the top of the page. 
 
-add credentials to `next-config.js` file filling in `APP_ID` and `APP_SECRET` variables.
+1. PSTN call implemented with the [NodeSDK] featuring real time transcription and insights.
+2. PSTN call implemented with the [Telephony API][telephony] featuring real time transcription, insights, and [Symbl React Elements][reactelements].
+3. Processed conversation data accessed from the [Conversation API](https://docs.symbl.ai/docs/conversation-api/overview/introduction) featuring participants and insights.
+4. [Async Text API](https://docs.symbl.ai/docs/async-api/overview/text/post-text) featuring [Symbl React Elements][reactelements], transcription, and insights.
+5. [Async Audio API](https://docs.symbl.ai/docs/async-api/overview/audio/post-audio) featuring [Symbl React Elements][reactelements], transcription, and insights.
+6. [Async Video API](https://docs.symbl.ai/docs/async-api/overview/video/post-video) featuring [Symbl React Elements][reactelements], transcription, and insights.
 
-```javascript
-module.exports = {
-  env: {
-    APP_ID: '',
-    APP_SECRET: '',
-  },
-}
-```
+## Community 
 
-run `yarn` or `npm install`. To run the app, use `yarn dev`
+If you have any questions, feel free to reach out to us at devrelations@symbl.ai, through our Community [Slack][slack], or [developer community][developer_community]
 
-Relevant docs section:
+This guide is actively developed, and we love to hear from you! Please feel free to [create an issue][issues] or [open a pull request][pulls] with your questions, comments, suggestions and feedback.  If you liked our integration guide, please star our repo!
 
-- [Getting started with Symbl](https://docs.symbl.ai/#getting-started)
-- [API overview using Postman](https://docs.symbl.ai/#postman)
-- [Authentication](https://docs.symbl.ai/#authentication)
+This library is released under the [MIT License][license]
 
-How Tos are available [here](https://docs.symbl.ai/#how-tos)
-
-In this app represented are the following
-
-- Symbl Node SDK (Check out `api/call` file)
-- REST Telephony API (`/phone` page)
-- Conversational API (`/conversations` page)
-- Async Audio API (`/audio` page)
-- Async Video API (`/video` page)
-- Async Text API (`/text` page) - Comming soon
-- Symbl react elements package available [here](https://www.npmjs.com/package/@symblai/react-elements)
-
-## Enjoy hacking with Symbl and if you have new ideas in mind, feel free to clone the repo and contribute or submit an issue.
+[license]: LICENSE.txt
+[telephony]: https://docs.symbl.ai/docs/telephony/overview/post-api
+[websocket]: https://docs.symbl.ai/docs/streamingapi/overview/introduction
+[developer_community]: https://community.symbl.ai/?_ga=2.134156042.526040298.1609788827-1505817196.1609788827
+[signup]: https://platform.symbl.ai/?_ga=2.63499307.526040298.1609788827-1505817196.1609788827
+[issues]: https://github.com/symblai/symbl-for-zoom/issues
+[pulls]: https://github.com/symblai/symbl-for-zoom/pulls
+[slack]: https://join.slack.com/t/symbldotai/shared_invite/zt-4sic2s11-D3x496pll8UHSJ89cm78CA
+[NodeSDK]: https://docs.symbl.ai/docs/javascript-sdk/overview/introduction
+[reactelements]: https://docs.symbl.ai/docs/symbl-elements
